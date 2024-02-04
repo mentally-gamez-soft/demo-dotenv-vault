@@ -168,3 +168,5 @@ cython_debug/
 !.env.project
 !.env.vault
 
+# visual studio code config
+.vscode
