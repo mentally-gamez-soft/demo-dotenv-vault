@@ -40,6 +40,7 @@ jobs:
       run: |
         python -m unittest tests/test_load_env_variables.py
       env:
+        APP_ENV: cicd_runner
         HOSTNAME: github_action_runner_host
         APP_INCOMING_CONNECTIONS: localhost
         DOCKER_REGISTRY: dummy_registry
