@@ -42,12 +42,5 @@ jobs:
         echo "APP_ENV: $APP_ENV"
       env:
         APP_ENV: ${{secrets.APP_ENV}}
-        HOSTNAME: github_action_runner_host
-        APP_INCOMING_CONNECTIONS: localhost
-        DOCKER_REGISTRY: dummy_registry
-        DEBUG: True
-        DB_NAME: dummy_db
-        DB_USER: dummy_db_user
-        DB_PASSWORD: dummy_db_pwd
-        DB_PORT: 1111
-        REDIS_PORT: 2222
+        WS_SPAM_HAM_HOSTNAME: ${{secrets.WS_SPAM_HAM_HOSTNAME}}
+        WS_SPAM_HAM_PORT: ${{secrets.WS_SPAM_HAM_PORT}}
