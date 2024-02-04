@@ -42,5 +42,5 @@ jobs:
         echo "APP_ENV: $APP_ENV"
       env:
         APP_ENV: ${{secrets.APP_ENV}}
-        WS_SPAM_HAM_HOSTNAME: ${{secrets.WS_SPAM_HAM_HOSTNAME}}
-        WS_SPAM_HAM_PORT: ${{secrets.WS_SPAM_HAM_PORT}}
+        WS_HOSTNAME: ${{secrets.WS_SPAM_HAM_HOSTNAME}}
+        WS_PORT: ${{secrets.WS_SPAM_HAM_PORT}}
