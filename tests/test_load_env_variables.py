@@ -38,4 +38,4 @@ class TestLoadEnvVariables(unittest.TestCase):
         self.assertEqual(get_payload_spam_ham(self.spam_email).get("classification"),"spam","The email message was expected to be a SPAM and the verification failed.")
 
     def test_email_is_ham(self):
-        self.assertEqual(get_payload_spam_ham(self.ham_email).get("ham"),"ham","The email message was expected to be a HAM and the verification failed.")
+        self.assertEqual(get_payload_spam_ham(self.ham_email).get("classification"),"ham","The email message was expected to be a HAM and the verification failed.")
