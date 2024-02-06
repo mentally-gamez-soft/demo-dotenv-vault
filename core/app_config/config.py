@@ -8,6 +8,8 @@ import dotenv_vault.main as vault
 from dotenv import load_dotenv as std_load_dotenv
 from dotenv_vault import load_dotenv as load_dotenv_vault
 
+GITHUB_CICD_ENV = "cicd_runner"
+LOCAL_DEV_ENV = "local.dev"
 
 class ConfigurationNotFoundException(Exception):
     """Raised when the configuration files of the application is not available."""
@@ -34,7 +36,7 @@ class EnvLoader:
                 "The APP_ENV variable is not set."
             )
 
-        if self.env["APP_ENV"] == "cicd_runner":
+        if self.env["APP_ENV"] == GITHUB_CICD_ENV:
             return True
 
         elif not os.path.exists(os.path.join(self.app_env_path, ".env.keys")):
@@ -56,7 +58,7 @@ class EnvLoader:
             bool: True if the environment variables are loaded, False otherwise
         """
         self.__load_appplication_physical_environment()
-        if env["APP_ENV"] == "cicd_runner":
+        if env["APP_ENV"] == GITHUB_CICD_ENV:
             return True
         
         try:
@@ -72,12 +74,8 @@ class EnvLoader:
         Returns:
             str: The encrypted env variable
         """
-        # old_dotenv_key = self.env.get("DOTENV_KEY")
 
-        if self.env["APP_ENV"] in ("local.dev"):
-            self.env["DOTENV_KEY"] = self.env.get("DOTENV_KEY_DEV")
-
-        elif self.env["APP_ENV"] in ("dev"):
+        if self.env["APP_ENV"] in (LOCAL_DEV_ENV):
             self.env["DOTENV_KEY"] = self.env.get("DOTENV_KEY_DEV")
 
         return self.env["DOTENV_KEY"]
@@ -90,7 +88,7 @@ class EnvLoader:
 
         try:
             dot_env_vault = None
-            if self.env["APP_ENV"] in ("dev", "local.dev"):
+            if self.env["APP_ENV"] in (LOCAL_DEV_ENV):
                 dot_env_vault = self.env["DOTENV_VAULT_DEV"]
 
             if dot_env_vault is None:
@@ -101,12 +99,12 @@ class EnvLoader:
             stream = self.vault.parse_vault(StringIO(dot_env_vault))
             load_dotenv_vault(stream=stream, override=False)
         finally:
-            os.unsetenv("DOTENV_KEY")  # erase the keys from the knowledge of the application
+            os.unsetenv("DOTENV_KEY")  # erase the keys from the knowledge of the application (system memory)
 
     def get_env_config(self):
         """Load the environment variables of the application."""
         if self.__load_env():
-            if self.env["APP_ENV"] != "cicd_runner":
+            if self.env["APP_ENV"] != GITHUB_CICD_ENV:
                 self.__init_env_key()
                 self.__load_decyphered_env()
         else:
@@ -118,4 +116,4 @@ class EnvLoader:
         return self.env.get(key)
     
     def is_application_executed_on_cicd_runner(self) -> bool:
-        return not os.path.exists(os.path.join(self.app_env_path, ".env.app_env"))
+        return GITHUB_CICD_ENV in self.env.get("APP_ENV")
